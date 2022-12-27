@@ -65,10 +65,10 @@ MODULE ExplicitMethods
       REAL(KIND=RP), DIMENSION(3) :: b = (/0.0_RP       ,  1.0_RP /3.0_RP ,    3.0_RP/4.0_RP  /)
       REAL(KIND=RP), DIMENSION(3) :: c = (/1.0_RP/3.0_RP,  15.0_RP/16.0_RP,    8.0_RP/15.0_RP /)
 
-      
+
       INTEGER :: i, j, k, id
 
-      if (present(dt_vec)) then   
+      if (present(dt_vec)) then
          if( mesh% IBM% active ) then
             if( mesh% IBM% semiImplicit ) then
 !$omp parallel do schedule(runtime)
@@ -77,15 +77,15 @@ MODULE ExplicitMethods
                   do i = 0, mesh% elements(id)% Nxyz(1); do j = 0, mesh% elements(id)% Nxyz(2); do k = 0, mesh% elements(id)% Nxyz(3)
                      if( mesh% elements(id)% isInsideBody(i,j,k) ) then
                         associate( Q => mesh% elements(id)% storage% Q(:,i,j,k) )
-                        call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q ) 
+                        call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q )
                         end associate
                      end if
                   end do; end do; end do
                end do
 !$omp end parallel do
             end if
-         end if 
-         
+         end if
+
          do k = 1,3
             tk = t + b(k)*deltaT
             call ComputeTimeDerivative( mesh, particles, tk, CTD_IGNORE_MODE)
@@ -106,7 +106,7 @@ MODULE ExplicitMethods
 #endif
             end do ! id
 !$omp end parallel do
-   
+
          end do ! k
 
          if( mesh% IBM% active ) then
@@ -123,7 +123,7 @@ MODULE ExplicitMethods
                end do
 !$omp end parallel do
             end if
-         end if 
+         end if
 
       else
 
@@ -142,7 +142,7 @@ MODULE ExplicitMethods
                end do
 !$omp end parallel do
             end if
-         end if 
+         end if
 
          do k = 1,3
             tk = t + b(k)*deltaT
@@ -164,7 +164,7 @@ MODULE ExplicitMethods
 #endif
             end do ! id
 !$omp end parallel do
-       
+
          end do ! k
 
          if( mesh% IBM% active ) then
@@ -174,14 +174,14 @@ MODULE ExplicitMethods
                   do i = 0, mesh% elements(id)% Nxyz(1); do j = 0, mesh% elements(id)% Nxyz(2); do k = 0, mesh% elements(id)% Nxyz(3)
                      if( mesh% elements(id)% isInsideBody(i,j,k) ) then
                         associate( Q => mesh% elements(id)% storage% Q(:,i,j,k) )
-                        call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q ) 
+                        call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q )
                         end associate
                      end if
                   end do; end do; end do
                end do
 !$omp end parallel do
             end if
-         end if 
+         end if
       end if
 !
 !     To obtain the updated residuals
@@ -222,8 +222,8 @@ MODULE ExplicitMethods
       real(kind=RP), parameter  :: c(N_STAGES) = [0.1496590219993_RP , 0.3792103129999_RP , 0.8229550293869_RP , 0.6994504559488_RP , 0.1530572479681_RP]
 
 
-      if (present(dt_vec)) then 
-      
+      if (present(dt_vec)) then
+
       if( mesh% IBM% active ) then
          if( mesh% IBM% semiImplicit ) then
 !$omp parallel do schedule(runtime)
@@ -239,7 +239,7 @@ MODULE ExplicitMethods
             end do
 !$omp end parallel do
          end if
-      end if 
+      end if
 
       DO k = 1, N_STAGES
 
@@ -264,15 +264,15 @@ MODULE ExplicitMethods
 !$omp end parallel do
 
       END DO
-      
-      if( mesh% IBM% active ) then 
+
+      if( mesh% IBM% active ) then
          if( mesh% IBM% semiImplicit ) then
 !$omp parallel do schedule(runtime)
             do id = 1, SIZE( mesh % elements )
                do i = 0, mesh% elements(id)% Nxyz(1); do j = 0, mesh% elements(id)% Nxyz(2); do k = 0, mesh% elements(id)% Nxyz(3)
                   if( mesh% elements(id)% isInsideBody(i,j,k) ) then
                      associate( Q => mesh% elements(id)% storage% Q(:,i,j,k) )
-                     call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q ) 
+                     call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q )
                      end associate
                   end if
                end do; end do; end do
@@ -282,7 +282,7 @@ MODULE ExplicitMethods
       end if
 
       else
-      
+
       if( mesh% IBM% active ) then
          if( mesh% IBM% semiImplicit ) then
             if( mesh% IBM% TimePenal ) mesh% IBM% penalization = 0.5_RP*deltaT
@@ -291,7 +291,7 @@ MODULE ExplicitMethods
                do i = 0, mesh% elements(id)% Nxyz(1); do j = 0, mesh% elements(id)% Nxyz(2); do k = 0, mesh% elements(id)% Nxyz(3)
                   if( mesh% elements(id)% isInsideBody(i,j,k) ) then
                      associate( Q => mesh% elements(id)% storage% Q(:,i,j,k) )
-                     call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q ) 
+                     call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q )
                      end associate
                   end if
                end do; end do; end do
@@ -323,7 +323,7 @@ MODULE ExplicitMethods
 !$omp end parallel do
 
       END DO
-      
+
       if( mesh% IBM% active ) then
          if( mesh% IBM% semiImplicit ) then
 !$omp parallel do schedule(runtime)
@@ -331,7 +331,7 @@ MODULE ExplicitMethods
                do i = 0, mesh% elements(id)% Nxyz(1); do j = 0, mesh% elements(id)% Nxyz(2); do k = 0, mesh% elements(id)% Nxyz(3)
                   if( mesh% elements(id)% isInsideBody(i,j,k) ) then
                      associate( Q => mesh% elements(id)% storage% Q(:,i,j,k) )
-                     call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q ) 
+                     call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q )
                     end associate
                   end if
                end do; end do; end do
@@ -362,7 +362,7 @@ MODULE ExplicitMethods
 !     ----------------
 !
       type(HexMesh)                               :: mesh
-#ifdef FLOW
+#if defined(FLOW)
       type(Particles_t)                           :: particles
 #else
       logical                                     :: particles
@@ -424,16 +424,18 @@ MODULE ExplicitMethods
 !$omp parallel do
             do id = 1, size( mesh % elements )
 #if defined(FLOW)
-                  mesh % elements(id) % storage % Q = a(k) * mesh % elements(id) % storage % G_NS &
-                                                    + b(k) * mesh % elements(id) % storage % Q    &
-                                                    + c(k) * dt_vec(id) * mesh % elements(id) % storage % Qdot
+               mesh % elements(id) % storage % Q = a(k) * mesh % elements(id) % storage % G_NS &
+                                                 + b(k) * mesh % elements(id) % storage % Q    &
+                                                 + c(k) * dt_vec(id) * mesh % elements(id) % storage % Qdot
 #elif defined(CAHNHILLIARD)
-                  mesh % elements(id) % storage % c = a(k) * mesh % elements(id) % storage % G_CH &
-                                                    + b(k) * mesh % elements(id) % storage % c    &
-                                                    + c(k) * dt_vec(id) * mesh % elements(id) % storage % cDot
+               mesh % elements(id) % storage % c = a(k) * mesh % elements(id) % storage % G_CH &
+                                                 + b(k) * mesh % elements(id) % storage % c    &
+                                                 + c(k) * dt_vec(id) * mesh % elements(id) % storage % cDot
 #endif
             end do ! id
 !$omp end parallel do
+
+            call stage_limiter(mesh)
 
          end do ! k
 
@@ -492,16 +494,18 @@ MODULE ExplicitMethods
 !$omp parallel do
             do id = 1, size( mesh % elements )
 #if defined(FLOW)
-                  mesh % elements(id) % storage % Q = a(k) * mesh % elements(id) % storage % G_NS &
-                                                    + b(k) * mesh % elements(id) % storage % Q    &
-                                                    + c(k) * deltaT * mesh % elements(id) % storage % Qdot
+               mesh % elements(id) % storage % Q = a(k) * mesh % elements(id) % storage % G_NS &
+                                                 + b(k) * mesh % elements(id) % storage % Q    &
+                                                 + c(k) * deltaT * mesh % elements(id) % storage % Qdot
 #elif defined(CAHNHILLIARD)
-                  mesh % elements(id) % storage % c = a(k) * mesh % elements(id) % storage % G_CH &
-                                                    + b(k) * mesh % elements(id) % storage % c    &
-                                                    + c(k) * deltaT * mesh % elements(id) % storage % cDot
+               mesh % elements(id) % storage % c = a(k) * mesh % elements(id) % storage % G_CH &
+                                                 + b(k) * mesh % elements(id) % storage % c    &
+                                                 + c(k) * deltaT * mesh % elements(id) % storage % cDot
 #endif
             end do ! id
 !$omp end parallel do
+
+            call stage_limiter(mesh)
 
          end do ! k
 
@@ -542,7 +546,7 @@ MODULE ExplicitMethods
 !     ----------------
 !
       type(HexMesh)                               :: mesh
-#ifdef FLOW
+#if defined(FLOW)
       type(Particles_t)                           :: particles
 #else
       logical                                     :: particles
@@ -604,16 +608,18 @@ MODULE ExplicitMethods
 !$omp parallel do
             do id = 1, size( mesh % elements )
 #if defined(FLOW)
-                  mesh % elements(id) % storage % Q = a(k) * mesh % elements(id) % storage % G_NS &
-                                                    + b(k) * mesh % elements(id) % storage % Q    &
-                                                    + c(k) * dt_vec(id) * mesh % elements(id) % storage % Qdot
+               mesh % elements(id) % storage % Q = a(k) * mesh % elements(id) % storage % G_NS &
+                                                 + b(k) * mesh % elements(id) % storage % Q    &
+                                                 + c(k) * dt_vec(id) * mesh % elements(id) % storage % Qdot
 #elif defined(CAHNHILLIARD)
-                  mesh % elements(id) % storage % c = a(k) * mesh % elements(id) % storage % G_CH &
-                                                    + b(k) * mesh % elements(id) % storage % c    &
-                                                    + c(k) * dt_vec(id) * mesh % elements(id) % storage % cDot
+               mesh % elements(id) % storage % c = a(k) * mesh % elements(id) % storage % G_CH &
+                                                 + b(k) * mesh % elements(id) % storage % c    &
+                                                 + c(k) * dt_vec(id) * mesh % elements(id) % storage % cDot
 #endif
             end do ! id
 !$omp end parallel do
+
+            call stage_limiter(mesh)
 
          end do ! k
 
@@ -671,18 +677,20 @@ MODULE ExplicitMethods
 
 !$omp parallel do
             do id = 1, size( mesh % elements )
-#ifdef FLOW
-                  mesh % elements(id) % storage % Q = a(k) * mesh % elements(id) % storage % G_NS &
-                                                    + b(k) * mesh % elements(id) % storage % Q    &
-                                                    + c(k) * deltaT * mesh % elements(id) % storage % Qdot
+#if defined(FLOW)
+               mesh % elements(id) % storage % Q = a(k) * mesh % elements(id) % storage % G_NS &
+                                                 + b(k) * mesh % elements(id) % storage % Q    &
+                                                 + c(k) * deltaT * mesh % elements(id) % storage % Qdot
+#elif defined(CAHNHILLIARD)
+               mesh % elements(id) % storage % c = a(k) * mesh % elements(id) % storage % G_CH &
+                                                 + b(k) * mesh % elements(id) % storage % c    &
+                                                 + c(k) * deltaT * mesh % elements(id) % storage % cDot
 #endif
-#if (defined(CAHNHILLIARD)) && (!defined(FLOW))
-                  mesh % elements(id) % storage % c = a(k) * mesh % elements(id) % storage % G_CH &
-                                                    + b(k) * mesh % elements(id) % storage % c    &
-                                                    + c(k) * deltaT * mesh % elements(id) % storage % cDot
-#endif
+
             end do ! id
 !$omp end parallel do
+
+            call stage_limiter(mesh)
 
          end do ! k
 
@@ -963,8 +971,8 @@ MODULE ExplicitMethods
 
       tk = t + deltaT
 
-      if (present(dt_vec)) then 
-      
+      if (present(dt_vec)) then
+
       if( mesh% IBM% active ) then
          if( mesh% IBM% semiImplicit ) then
 !$omp parallel do schedule(runtime)
@@ -973,14 +981,14 @@ MODULE ExplicitMethods
                do i = 0, mesh% elements(id)% Nxyz(1); do j = 0, mesh% elements(id)% Nxyz(2); do k = 0, mesh% elements(id)% Nxyz(3)
                   if( mesh% elements(id)% isInsideBody(i,j,k) ) then
                      associate( Q => mesh% elements(id)% storage% Q(:,i,j,k) )
-                     call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q ) 
+                     call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q )
                      end associate
                   end if
                end do; end do; end do
             end do
 !$omp end parallel do
          end if
-      end if 
+      end if
 
       DO k = 1, N_STAGES
 
@@ -1004,7 +1012,7 @@ MODULE ExplicitMethods
 !$omp end parallel do
 
       END DO
-      
+
       if( mesh% IBM% active ) then
          if( mesh% IBM% semiImplicit ) then
 !$omp parallel do schedule(runtime)
@@ -1012,17 +1020,17 @@ MODULE ExplicitMethods
                do i = 0, mesh% elements(id)% Nxyz(1); do j = 0, mesh% elements(id)% Nxyz(2); do k = 0, mesh% elements(id)% Nxyz(3)
                   if( mesh% elements(id)% isInsideBody(i,j,k) ) then
                      associate( Q => mesh% elements(id)% storage% Q(:,i,j,k) )
-                     call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q ) 
+                     call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q )
                      end associate
                   end if
                end do; end do; end do
             end do
 !$omp end parallel do
          end if
-      end if 
+      end if
 
       else
-      
+
       if( mesh% IBM% active ) then
          if( mesh% IBM% semiImplicit ) then
             if( mesh% IBM% TimePenal ) mesh% IBM% penalization = 0.5_RP*deltaT
@@ -1031,7 +1039,7 @@ MODULE ExplicitMethods
                do i = 0, mesh% elements(id)% Nxyz(1); do j = 0, mesh% elements(id)% Nxyz(2); do k = 0, mesh% elements(id)% Nxyz(3)
                   if( mesh% elements(id)% isInsideBody(i,j,k) ) then
                      associate( Q => mesh% elements(id)% storage% Q(:,i,j,k) )
-                     call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q ) 
+                     call mesh% IBM% GetSemiImplicitStep( id, 0.5_RP*deltaT, Q )
                      end associate
                   end if
                end do; end do; end do
@@ -1062,7 +1070,7 @@ MODULE ExplicitMethods
 !$omp end parallel do
 
       END DO
-      
+
       if( mesh% IBM% active ) then
          if( mesh% IBM% semiImplicit ) then
 !$omp parallel do schedule(runtime)
@@ -1090,6 +1098,109 @@ MODULE ExplicitMethods
 !
 !///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 !
+#if defined(NAVIERSTOKES) || defined(SPALARTALMARAS)
+   subroutine stage_limiter(mesh)
+!
+!     -------
+!     Modules
+!     -------
+!
+      use ElementClass,      only: Element
+      use NodalStorageClass, only: NodalStorage
+      use FluidData,         only: thermodynamics
+!
+!     ---------
+!     Interface
+!     ---------
+!
+      type(HexMesh), target, intent(inout) :: mesh
+!
+!     ---------------
+!     Local variables
+!     ---------------
+!
+      real(RP), parameter    :: minimum = 1.0e-13
+      real(RP)               :: m
+      real(RP)               :: Q(5), Qavg(5)
+      real(RP)               :: rho, minrho
+      real(RP)               :: p, pavg, minp
+      real(RP)               :: invvol
+      real(RP)               :: theta
+      real(RP)               :: gm1
+      integer                :: eID
+      integer                :: i, j, k
+      type(Element), pointer :: e
+      real(RP),      pointer :: wx(:), wy(:), wz(:)
+
+
+      gm1 = thermodynamics % gammaMinus1
+      invvol = 1.0_RP / 8.0_RP
+
+      ! Try limiting the solution first
+!$omp parallel do default(private) shared(mesh, NodalStorage) firstprivate(invvol, gm1)
+      do eID = 1, mesh % no_of_elements
+         e  => mesh % elements(eID)
+         wx => NodalStorage(e % Nxyz(1)) % w
+         wy => NodalStorage(e % Nxyz(2)) % w
+         wz => NodalStorage(e % Nxyz(3)) % w
+
+         ! Compute averages
+         Qavg = 0.0_RP
+         do k = 0, e % Nxyz(3); do j = 0, e % Nxyz(2); do i = 0, e % Nxyz(1)
+            Qavg = Qavg + e % storage % Q(:,i,j,k) * wx(i) * wy(j) * wz(k)
+         end do               ; end do               ; end do
+         Qavg = Qavg * invvol
+
+         ! Density first
+         minrho = huge(1.0_RP)
+         do k = 0, e % Nxyz(3); do j = 0, e % Nxyz(2); do i = 0, e % Nxyz(1)
+            rho = e % storage % Q(1,i,j,k)
+            if (rho < minrho) minrho = rho
+         end do               ; end do               ; end do
+
+         m = min(minimum, Qavg(1))
+         theta = abs((Qavg(1) - m) / (Qavg(1) - minrho))
+         if (theta <= 1.0_RP) then
+            e % storage % Q(1,:,:,:) = theta * (e % storage % Q(1,:,:,:) - Qavg(1)) + Qavg(1)
+         end if
+
+         ! Pressure now (Jensen's inequality is NOT conservative for the pressure)
+         minp = huge(1.0_RP)
+         pavg = 0.0_RP
+         do k = 0, e % Nxyz(3); do j = 0, e % Nxyz(2); do i = 0, e % Nxyz(1)
+            Q = e % storage % Q(:,i,j,k)
+            p = gm1 * (Q(5) - 0.5_RP * (Q(2)**2 + Q(3)**2 + Q(4)**2) / Q(1))
+            pavg = pavg + p * wx(i) * wy(j) * wz(k)
+            if (p < minp) minp = p
+         end do               ; end do               ; end do
+         pavg = pavg * invvol
+
+         ! pavg = gm1 * (Qavg(5) - 0.5_RP * (Qavg(2)**2 + Qavg(3)**2 + Qavg(4)**2) / Qavg(1))
+         m = min(minimum, pavg)
+         theta = abs((pavg - m) / (pavg - minp))
+         if (theta <= 1.0_RP) then
+            do k = 0, e % Nxyz(3); do j = 0, e % Nxyz(2); do i = 0, e % Nxyz(1)
+               e % storage % Q(:,i,j,k) = theta * (e % storage % Q(:,i,j,k) - Qavg) + Qavg
+            end do               ; end do               ; end do
+         end if
+
+      end do
+!$omp end parallel do
+
+      nullify(e)
+      nullify(wx)
+      nullify(wy)
+      nullify(wz)
+
+   end subroutine stage_limiter
+#else
+   subroutine stage_limiter(mesh)
+      type(HexMesh), intent(in) :: mesh
+   end subroutine stage_limiter
+#endif
+!
+!///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+!
    Subroutine checkForNan(mesh, t)
 !
 !        **************************************************************************************************************
@@ -1106,10 +1217,10 @@ MODULE ExplicitMethods
       real(kind=RP), intent(in)     :: t
 
       !local variables
-      integer                       :: eID, i, j, k
-      CHARACTER(len=LINE_LENGTH)    :: FinalName      !  Final name for particular restart file
-      logical                       :: NanNotFound, allNan
-      integer                       :: ierr
+      integer                    :: eID
+      CHARACTER(len=LINE_LENGTH) :: FinalName      !  Final name for particular restart file
+      logical                    :: NanNotFound, allNan
+      integer                    :: ierr
 
       ! use not found instead of found as OMP reduction initialized the private value as true
       ! this is redundant for the OMP but left for non parallel compilations
